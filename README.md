@@ -14,7 +14,7 @@ You can [install Docker](https://docs.docker.com/engine/install/) directly or us
 
 #### Docker
 Run the below commands as root or a member of the `docker` group
-* `docker run --network=host --name sponsorblockcast ghcr.io/nichobi/sponsorblockcast:latest`
+* `docker run --network=host --name sponsorblockcast nixuu/sponsorblockcast:latest`
 
 #### Docker Compose
 First you will need a `docker-compose.yaml` file, such as the example included. Run the below commands as root or a member of the `docker` group
