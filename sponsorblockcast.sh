@@ -28,6 +28,12 @@ watch () {
     if echo "$status" | grep -q "YouTube (PLAYING)"
     then
       video_id=$(echo "$status" | grep -oP "id=\"\K[^\"]+")
+      title=$(echo "$status" | grep -oP "title=\"[^ \"]+")
+      if [[ "$video_id" == "" ]]; then
+        video_id=$(youtube-dl -j "ytsearch1:$title" | jq ". | select( .uploader == \"$artist\" ) | .id" | tr -d '"')
+      fi
+      if [[ ! -z "$video_id" ]]
+      then
       get_segments "$video_id"
       progress=$(echo "$status" | grep -oP 'remaining=\K[^s]+')
       while read -r start end category; do
@@ -37,6 +43,7 @@ watch () {
           go-chromecast -u "$uuid" seek-to "$end"
         fi
       done < "$video_id.segments"
+      fi
     fi
   done;
 }
