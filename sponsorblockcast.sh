@@ -28,8 +28,8 @@ watch () {
     if echo "$status" | grep -q "YouTube (PLAYING)"
     then
       video_id=$(echo "$status" | grep -oP "id=\"\K[^\"]+")
-      title=$(echo "$status" | grep -oP "title=\"[^ \"]+")
-      artist=$(echo "$status" | grep -oP "artist=\"[^ \"]+")
+      title=$(echo "$status" | grep -oP "title=\"\k[^ \"]+")
+      artist=$(echo "$status" | grep -oP "artist=\"\k[^ \"]+")
       if [[ "$video_id" == "" ]]; then
         video_id=$(youtube-dl -j "ytsearch1:$title" | jq ". | select( .uploader == \"$artist\" ) | .id" | tr -d '"')
       fi
