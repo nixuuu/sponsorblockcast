@@ -28,10 +28,18 @@ watch () {
     if echo "$status" | grep -q "YouTube (PLAYING)"
     then
       video_id=$(echo "$status" | grep -oP "id=\"\K[^\"]+")
-      title=$(echo "$status" | grep -oP "title=\"\K[^ \"]+")
-      artist=$(echo "$status" | grep -oP "artist=\"\K[^ \"]+")
+      title=$(echo "$status" | grep -oP "title=\"\K[^\"]+")
+      artist=$(echo "$status" | grep -oP "artist=\"\K[^\"]+")
+      title_hash=$(echo -n "$title_$artist" | md5sum | awk '{print $1}')
       if [[ "$video_id" == "" ]]; then
-        video_id=$(youtube-dl -j "ytsearch1:$title" | jq ". | select( .uploader == \"$artist\" ) | .id" | tr -d '"')
+        if [[ ! -f "$title_hash.id" ]]; then
+          go-chromecast -u "$uuid" pause
+          video_id=$(youtube-dl -j "ytsearch1:$title" | jq ". | select( .channel == \"$artist\" ) | .id" | tr -d '"')
+          echo -n "$video_id" > "$title_hash.id"
+          go-chromecast -u "$uuid" unpause
+        else
+          video_id=$(cat "$title_hash.id")
+        fi
       fi
       if [[ ! -z "$video_id" ]]
       then
@@ -44,6 +52,8 @@ watch () {
           go-chromecast -u "$uuid" seek-to "$end"
         fi
       done < "$video_id.segments"
+      else
+        echo "" > "$title_hash.id"
       fi
     fi
   done;
