@@ -26,6 +26,7 @@ First you will need a `docker-compose.yaml` file, such as the example included. 
 * [go-chromecast](https://github.com/vishen/go-chromecast)
 * [jq](https://stedolan.github.io/jq)
 * [bc](https://www.gnu.org/software/bc)
+* [youtube-dl](https://youtube-dl.org/)
 #### Instructions
 * Copy [sponsorblockcast.sh](/sponsorblockcast.sh) to `/usr/bin/sponsorblockcast`.
 * Copy [sponsorblockcast.service](/sponsorblockcast.service) to `/usr/lib/systemd/system/sponsorblockcast.service`.
